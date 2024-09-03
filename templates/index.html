@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio transcriptions</title>
+    <style type="text/css">
+        .padded{
+            padding: 8px 8%;
+        }
+        .record{
+            display:flex;
+        }
+        .audio{
+            width: 300px;
+            margin-right: 8px;
+        }
+        .record-name{
+            text-align: center;
+        }
+        .save-record{
+            float: right;
+            font-size: 20px;
+        }
+        .transcription{
+            padding: 10px 8px;
+            flex: 1;
+        }
+        .overlay{
+            z-index: -10;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+{% for id, content in records.items() %}
+<div class="record padded" data-id="{{ id }}">
+    <div class="audio">
+        <div class="record-name">{{ id }}.wav</div>
+        <audio controls src="{{ id }}.wav" type="audio/wav"></audio>
+        <button class="save-record single-record">Save</button>
+    </div>
+    <textarea class="transcription" placeholder="Audio transcription">{{ content }}</textarea>
+</div>
+{% endfor %}
+<div class="padded">
+    <button id="save-all" class="save-record">Save All</button>
+</div>
+
+<script>
+    document.querySelectorAll('.single-record').forEach(e => {
+        e.addEventListener('click', event => {
+            let record = event.currentTarget.closest('.record')
+            let data = [getRecordData(record)]
+
+            postRecords(data)
+        })
+    })
+
+
+    document.querySelector('#save-all').addEventListener('click', event => {
+        let records = document.querySelectorAll('.record')
+        let data = []
+
+        records.forEach(record => data.push(getRecordData(record)))
+        postRecords(data)
+    })
+
+    function getRecordData(record){
+        return {
+            "id": record.dataset.id,
+            "text": record.querySelector('textarea').value
+        }
+    }
+
+    function postRecords(data){
+        let overlay = document.querySelector('.overlay')
+        overlay.style.zIndex = 10
+        
+        fetch('/', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        }).then(resp => {
+            if (resp.ok) {
+                overlay.style.zIndex = -10
+            }
+        })
+    }
+</script>
+
+</body>
+</html>
