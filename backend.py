@@ -22,7 +22,7 @@ def get_records(path):
         except Exception:
             continue
     
-    return records
+    return dict(sorted(records.items()))
 
 def post_records(path, records):
     for record in records:
