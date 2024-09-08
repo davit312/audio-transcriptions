@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio transcriptions</title>
     <style type="text/css">
+        textarea{
+            font-size: 16px;
+        }
         .padded{
             padding: 8px 8%;
         }
@@ -49,9 +52,15 @@
     <textarea class="transcription" placeholder="Audio transcription">{{ content }}</textarea>
 </div>
 {% endfor %}
+{% if records %}
 <div class="padded">
     <button id="save-all" class="save-record">Save All</button>
 </div>
+{% else %}
+<div class="padded">
+    <p style="text-align: center;">No records</p>
+</div>
+{% endif %}
 
 <script>
     document.querySelectorAll('.single-record').forEach(e => {

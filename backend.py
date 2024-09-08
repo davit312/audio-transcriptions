@@ -35,5 +35,5 @@ def post_records(path, records):
                     os.unlink(content_file)
             else:
                 with open(content_file, 'w') as frc:
-                    frc.write(txt)
+                    frc.write(txt.strip())
 
