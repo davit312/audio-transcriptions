@@ -21,8 +21,8 @@ def get_records(path):
                 records[tokens[0]] = cf.read()
         except Exception:
             continue
-    
-    return dict(sorted(records.items()))
+
+    return dict(sorted(records.items(), key=lambda x: _name_to_float(x[0])))
 
 def post_records(path, records):
     for record in records:
@@ -37,3 +37,11 @@ def post_records(path, records):
                 with open(content_file, 'w') as frc:
                     frc.write(txt.strip())
 
+def _name_to_float(val):
+
+    res = val.split('-')
+
+    if int(res[1]) < 100:
+        res[1] = '0' + res[1]
+
+    return '-'.join(res)
