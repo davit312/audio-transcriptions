@@ -40,6 +40,10 @@ def post_records(path, records):
 def _name_to_float(val):
 
     res = val.split('-')
+    # if file not exported from audacity labels
+    if len(res) != 2:
+        return val 
+ 
 
     if int(res[1]) < 100:
         res[1] = '0' + res[1]
