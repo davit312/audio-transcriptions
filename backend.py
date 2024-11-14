@@ -17,7 +17,7 @@ def get_records(path):
             continue
 
         try:
-            with open(os.path.join(path, tokens[0]+'.txt'), 'r') as cf:
+            with open(os.path.join(path, tokens[0]+'.txt'), 'r', encoding='utf8') as cf:
                 records[tokens[0]] = cf.read()
         except Exception:
             continue
@@ -34,7 +34,7 @@ def post_records(path, records):
                 if os.path.isfile(content_file):
                     os.unlink(content_file)
             else:
-                with open(content_file, 'w') as frc:
+                with open(content_file, 'w', encoding='utf8') as frc:
                     frc.write(txt.strip())
 
 def _name_to_float(val):
