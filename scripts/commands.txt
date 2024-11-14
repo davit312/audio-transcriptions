@@ -1,0 +1,20 @@
+# Comvert mp3 to wav
+for i in $(ls *.mp3 ); do  
+    ffmpeg -i $i -ac 1 -ar 22050 $i.wav 
+done
+
+------------------------------------------------------
+# Sum of mp3 files length
+sum=
+for i in $(ls -1 *.mp3); do 
+    sum+=$(ffprobe -show_streams -print_format json $i -v fatal | jq '.streams[0].duration')+ 
+done
+sum+=0
+echo $sum | tr -d '"' | bc -l
+
+--------------------------------------------------------------
+# Add prefix 'km' to .wav file names
+for i in *.wav; do 
+    mv $i km$i ; 
+done
+
